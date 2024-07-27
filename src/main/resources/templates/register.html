@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f2f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 300px;
+}
+
+h2 {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+.login-link {
+    padding: 10px;
+}
+
+.error {
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+    <div th:if="${success}" class="message success">
+            <p th:text="${success}"></p>
+     </div>
+
+        <!-- Error Message -->
+     <div th:if="${error}" class="message error">
+           <p th:text="${error}"></p>
+      </div>
+      
+    <h2>Register</h2>
+
+    <form th:action="@{/registration}" method="post" th:object="${User}" onsubmit="return validation()">
+        <div class="form-group">
+            <label for="fullname">Fullname</label>
+            <input type="text" id="fname" name="fullname" placeholder="Enter Your Full name">
+            <p id="fnameError" class="error"></p><br>
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="Enter your email">
+            <p id="emailError" class="error"></p><br>
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Enter your password">
+            <p id="passError" class="error"></p><br>
+        </div>
+
+        <button type="submit">Register</button>
+
+        <div class="login-link">
+            <p>Already Have An Account? <a th:href="@{/login}">Log in</a></p>
+        </div>
+    </form>
+</div>
+
+<script>
+function validation() {
+    var firstname = document.getElementById("fname");
+    var email = document.getElementById("email");
+    var password = document.getElementById("password");
+
+    var flag = 1;
+
+    // Firstname validation
+    if (firstname.value == "") {
+        document.getElementById("fnameError").innerHTML = "*** Fullname is required.";
+        flag = 0;
+    } else if (firstname.value.length < 4) {
+        document.getElementById("fnameError").innerHTML = "*** Fullname requires a minimum of 4 characters.";
+        flag = 0;
+    } else if (!isNaN(firstname.value)) {
+        document.getElementById("fnameError").innerHTML = "**** Only alphabets are allowed.";
+        flag = 0;
+    } else {
+        document.getElementById("fnameError").innerHTML = "";
+    }
+
+    // Email validation
+    var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/; // Basic regex pattern for email validation
+    if (email.value == "") {
+        document.getElementById("emailError").innerHTML = "*** Email is required.";
+        flag = 0;
+    } else if (!emailPattern.test(email.value)) {
+        document.getElementById("emailError").innerHTML = "*** Invalid email format.";
+        flag = 0;
+    } else {
+        document.getElementById("emailError").innerHTML = "";
+    }
+
+    // Password validation
+    if (password.value == "") {
+        document.getElementById("passError").innerHTML = "*** Password is required.";
+        flag = 0;
+    } else if (password.value.length < 6) {
+        document.getElementById("passError").innerHTML = "*** Password requires a minimum of 6 characters.";
+        flag = 0;
+    } else {
+        document.getElementById("passError").innerHTML = "";
+    }
+
+    return flag == 1;
+}
+</script>
+</body>
+</html>
