@@ -39,7 +39,11 @@ public class UserController {
 			redirectAttributes.addFlashAttribute("error","Registration failed");
 			return "redirect:/registration";
 		 }
-		
-		
+	}
+	
+	@GetMapping("/login")
+	public String login()
+	{
+		return "login";
 	}
 }
